@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?><!-- Use this file to deploy some handlers/chains and services      --><!-- Two ways to do this:                                           --><!--   java org.apache.axis.client.AdminClient deploy.wsdd          --><!--      after the axis server is running                          --><!-- or                                                             --><!--   java org.apache.axis.utils.Admin client|server deploy.wsdd   --><!--      from the same directory that the Axis engine runs         --><deployment xmlns="http://xml.apache.org/axis/wsdd/" xmlns:java="http://xml.apache.org/axis/wsdd/providers/java">
+
+  <!-- Services from MyMainControllerService WSDL service -->
+
+  <service name="MyMainController" provider="java:RPC" style="wrapped" use="literal">
+      <parameter name="wsdlTargetNamespace" value="http://springmvctest"/>
+      <parameter name="wsdlServiceElement" value="MyMainControllerService"/>
+      <parameter name="schemaQualified" value="http://springmvctest"/>
+      <parameter name="wsdlServicePort" value="MyMainController"/>
+      <parameter name="className" value="springmvctest.MyMainController"/>
+      <parameter name="wsdlPortType" value="MyMainController"/>
+      <parameter name="typeMappingVersion" value="1.2"/>
+      <operation xmlns:operNS="http://springmvctest" xmlns:retNS="http://springmvctest" xmlns:rtns="http://www.w3.org/2001/XMLSchema" name="show" qname="operNS:show" returnQName="retNS:showReturn" returnType="rtns:string" soapAction="">
+        <parameter xmlns:pns="http://springmvctest" xmlns:tns="http://www.w3.org/2001/XMLSchema" qname="pns:model" type="tns:anyType"/>
+      </operation>
+      <parameter name="allowedMethods" value="show"/>
+
+      <typeMapping xmlns:ns="http://springmvctest" qname="ns:&gt;showResponse" type="java:springmvctest.ShowResponse" serializer="org.apache.axis.encoding.ser.BeanSerializerFactory" deserializer="org.apache.axis.encoding.ser.BeanDeserializerFactory" encodingStyle=""/>
+  </service>
+</deployment>
