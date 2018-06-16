@@ -13,7 +13,7 @@ import springmvctest.io.spring.guides.gs_producing_web_service.GetCountryRespons
 
 @Endpoint
 public class CountryEndpoint {
-    public static final String NAMESPACE_URI ="http://spring.io/guides/gs-producing-web-webservice";
+    public static final String NAMESPACE_URI ="http://spring.io/guides/gs-producing-web-service";
     
     private CountryRepository countryRepository;
     
