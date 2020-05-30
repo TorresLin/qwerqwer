@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:sws="http://www.springframework.org/schema/web-services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.springframework.org/schema/beans        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd          http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services-2.0.xsd          http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd          http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+   <sws:annotation-driven />
+   <mvc:annotation-driven />
+   <context:component-scan base-package="com.fubon.ecws.endpoint" />
+   <context:property-placeholder order="1" location="/WEB-INF/config/tpfb-config.properties" ignore-resource-not-found="true" ignore-unresolvable="true" />
+   <context:property-placeholder order="2" location="/WEB-INF/config/cert-config.properties" ignore-resource-not-found="true" ignore-unresolvable="true" />
+   <context:property-placeholder order="3" location="/WEB-INF/config/flightstats-config.properties" ignore-resource-not-found="true" ignore-unresolvable="true" />
+   <context:property-placeholder order="4" location="/WEB-INF/config/sys-config.properties" />
+   <sws:dynamic-wsdl id="oltp" portTypeName="FubonIns" locationUri="/oltpService/" targetNamespace="http://www.fubon.com/oltp/definitions">
+      <sws:xsd location="classpath:com/fubon/ecws/contract/oltp.xsd" />
+   </sws:dynamic-wsdl>
+   <sws:interceptors>
+      <bean id="ecwsSecurityInterceptor" class="com.fubon.ecws.security.EcwsSecurityInterceptor" />
+   </sws:interceptors>
+   <mvc:interceptors>
+      <mvc:interceptor>
+         <mvc:mapping path="/enSeService" />
+         <bean class="com.fubon.ecws.security.EcwsEncryptJsonSecurityInterceptor" />
+      </mvc:interceptor>
+      <mvc:interceptor>
+         <mvc:mapping path="/cnService" />
+         <bean class="com.fubon.ecws.security.EcwsCnJsonSecurityInterceptor" />
+      </mvc:interceptor>
+      <mvc:interceptor>
+         <mvc:mapping path="/service" />
+         <bean class="com.fubon.ecws.security.EcwsJsonSecurityInterceptor" />
+      </mvc:interceptor>
+   </mvc:interceptors>
+   <!-- <bean id="springSecurityHandler"
+
+            class="org.springframework.ws.soap.security.xwss.callback.SpringPlainTextPasswordValidationCallbackHandler">
+
+                <property name="authenticationManager" ref="authenticationManager" />
+
+        </bean> -->
+   <bean id="authenticationManager" class="org.springframework.security.authentication.ProviderManager">
+      <property name="providers">
+         <bean class="org.springframework.security.authentication.dao.DaoAuthenticationProvider">
+            <property name="passwordEncoder" ref="passwordEncoder" />
+            <property name="userDetailsService" ref="userDetailsService" />
+         </bean>
+      </property>
+   </bean>
+   <bean id="passwordEncoder" class="org.springframework.security.authentication.encoding.ShaPasswordEncoder">
+      <constructor-arg value="256" />
+   </bean>
+   <bean id="exceptionResolver" class="org.springframework.ws.soap.server.endpoint.SoapFaultMappingExceptionResolver">
+      <property name="defaultFault" value="SERVER" />
+      <property name="exceptionMappings">
+         <props>
+            <prop key="org.springframework.oxm.ValidationFailureException">CLIENT,Invalid request</prop>
+         </props>
+      </property>
+   </bean>
+</beans>

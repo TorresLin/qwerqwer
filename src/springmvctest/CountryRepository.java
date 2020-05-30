@@ -4,10 +4,11 @@ import javax.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
 
-import springmvctest.io.spring.guides.gs_producing_web_service.Country;
-import springmvctest.io.spring.guides.gs_producing_web_service.Currency;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+
+import springmvctest.io.spring.guides.gs_producing_web_service.Country;
+import springmvctest.io.spring.guides.gs_producing_web_service.Currency;
 
 @Component
 public class CountryRepository {
